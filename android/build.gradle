@@ -1,0 +1,82 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+        maven { url "https://artifactory.img.ly/artifactory/imgly" }
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0"
+        classpath 'ly.img.android.sdk:plugin:10.1.1'
+    }
+}
+
+buildscript {
+    ext {
+        buildToolsVersion = "30.0.2"
+        minSdkVersion = 24
+        compileSdkVersion = 31
+        targetSdkVersion = 30
+        ndkVersion = "21.4.7075529"
+        supportLibVersion   = "28.0.0"
+        playServicesVersion = "17.0.0" // or find latest version
+        androidMapsUtilsVersion = "+0.5"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:4.2.2")
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        mavenCentral {
+            // We don't want to fetch react-native from Maven Central as there are
+            // older versions over there.
+            content {
+                excludeGroup "com.facebook.react"
+            }
+        }
+        google()
+
+        //Configure Gradle to load exoplayer plugins from jcenter instead of maven (can be removed later once react-native-video are moved to mavenCentral)
+        // jcenter repository is deprecated: https://developer.android.com/studio/build/jcenter-migration
+        jcenter() {
+            content {
+                // however, react-native-video's native packages have not been migrated yet, so we keep this config for now
+                includeModule("com.yqritc", "android-scalablevideoview")
+                includeModule("com.google.android.exoplayer", "extension-okhttp")
+                includeModule("com.google.android.exoplayer", "exoplayer")
+                includeModule("com.google.android.exoplayer", "exoplayer-core")
+                includeModule("com.google.android.exoplayer", "exoplayer-dash")
+                includeModule("com.google.android.exoplayer", "exoplayer-hls")
+                includeModule("com.google.android.exoplayer", "exoplayer-smoothstreaming")
+                includeModule("com.google.android.exoplayer", "exoplayer-ui")
+                includeModule("com.google.android.exoplayer", "exoplayer-extractor")
+                includeModule("com.google.android.exoplayer", "exoplayer-common")
+                includeModule("com.google.android.exoplayer", "exoplayer-transformer")
+            }
+        }
+
+        maven { url 'https://www.jitpack.io' }
+    }
+}
+
+ allprojects {
+     repositories {
+         maven { url 'https://artifactory.img.ly/artifactory/imgly' }
+     }
+ }
